@@ -1,10 +1,10 @@
 #!/bin/bash
+# This script will report server performance stats
 
 # Capture the CPU idle percentage
-cpu_idle=$(top -bn 1 | grep "Cpu(s)" | sed 's/[a-z,:%]//g' | awk '{print $8}')
-
-# Calculate CPU used percentage (100 - idle)
-cpu_usage=$(awk "BEGIN {print (100 - $cpu_idle)}")
+cpu_idle=$(top -bn1 | grep "Cpu(s)" | \
+    sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | \
+    awk '{print 100 - $1"%"}')
 
 # Get Memory stats in MB
 stats=$(free -m | awk 'NR==2{printf "%s %s %s", $2, $3, $4}')
@@ -15,8 +15,12 @@ read total used free <<< "$stats"
 # Calculate percentage using awk for decimal support
 percent=$(awk "BEGIN {printf \"%.2f\", ($used/$total)*100}")
 
+# Get current disk space used, free  and usage
+disk=$(df -h / | awk 'NR==2{printf "| Used: %s | Free: %s | Usage: %s |\n", $3, $4, $5}')
+
 echo "--------------------------"
-echo "Current CPU Usage: $cpu_usage%"
-echo "Memory Total: ${total}MB"
-echo "Memory Usage: ${percent}%"
+echo "Current CPU Usage:" ${cpu_idle}
+echo "Memory Total:" ${total}MB
+echo "Memory Usage:" ${percent}%
+echo "Disk Stats:" ${disk}
 echo "--------------------------"
