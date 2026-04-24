@@ -1,0 +1,2 @@
+# Read the values into variables
+read total used free <<< "$stats"
