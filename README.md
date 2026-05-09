@@ -5,7 +5,8 @@ This tool will report back the following server statistics.
 - Memory Usage
 - Disk Stats
 
-Instructions
+## Instructions
 Download this script to your machine, and run it.
 
-Project: https://roadmap.sh/projects/server-stats
+## Project Link
+https://roadmap.sh/projects/server-stats
